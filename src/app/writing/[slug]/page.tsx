@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createBrowserClient } from '@/lib/supabase/client'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import type { Metadata } from 'next'
 
@@ -21,8 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `${post.title} — Michel Moubarak`, description: post.excerpt ?? undefined }
 }
 
+// generateStaticParams runs at build time with no request scope,
+// so we use the cookie-free browser client instead of the server client.
 export async function generateStaticParams() {
-  const supabase = await createClient()
+  const supabase = createBrowserClient()
   const { data } = await supabase.from('blog_posts').select('slug').eq('published', true)
   return (data ?? []).map(({ slug }) => ({ slug }))
 }
