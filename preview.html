@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michel Moubarak — Layout Compare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-a:     #F3F1EB;
+      --ink-a:    #181714;
+      --mid-a:    #7A7870;
+      --faint-a:  #B8B5AB;
+      --rule-a:   #DEDAD2;
+      --margin-a: #C8C4BA;
+      --accent-a: #2A3D28;
+
+      --bg-b:     #FFFFFF;
+      --ink-b:    #111111;
+      --mid-b:    #666666;
+      --faint-b:  #AAAAAA;
+      --rule-b:   #E8E8E8;
+      --accent-b: #111111;
+      --sidebar-b:#F7F7F7;
+
+      --serif: 'EB Garamond', Georgia, serif;
+      --sans:  'Jost', system-ui, sans-serif;
+      --mono:  'DM Mono', 'Courier New', monospace;
+    }
+
+    body { margin: 0; font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+
+    /* ── COMPARE TOOLBAR ── */
+    .compare-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 8px;
+      height: 48px;
+    }
+
+    .compare-bar span {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+      margin: 0 14px;
+    }
+
+    .compare-bar button {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.45);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 20px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .compare-bar button.on {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.4);
+      color: #fff;
+    }
+
+    .layout { display: none; padding-top: 48px; min-height: 100vh; }
+    .layout.on { display: block; }
+
+
+    /* ═══════════════════════════════════════
+       LAYOUT A — MARGIN LINE / NOTEBOOK
+    ═══════════════════════════════════════ */
+    #layout-a {
+      background: var(--bg-a);
+      color: var(--ink-a);
+      background-image: linear-gradient(
+        to right,
+        transparent 303px,
+        var(--margin-a) 303px,
+        var(--margin-a) 304px,
+        transparent 304px
+      );
+    }
+
+    .a-nav {
+      position: fixed;
+      top: 48px; left: 0; right: 0;
+      z-index: 100;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 64px;
+      background: rgba(243,241,235,0.93);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--rule-a);
+    }
+    .a-nav-name {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--ink-a);
+      text-decoration: none;
+      width: 240px;
+    }
+    .a-nav-links { display: flex; gap: 28px; list-style: none; }
+    .a-nav-links a {
+      font-size: 11px; font-weight: 300;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--mid-a); text-decoration: none;
+      transition: color 0.18s;
+    }
+    .a-nav-links a:hover { color: var(--ink-a); }
+
+    .a-body { padding-top: 54px; }
+
+    /* A — HERO */
+    .a-hero {
+      padding: 80px 64px 72px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 0 48px;
+    }
+    .a-hero-aside {
+      text-align: right; padding-right: 32px;
+      font-family: var(--serif); font-size: 13px;
+      font-style: italic; color: var(--faint-a);
+      padding-top: 10px;
+    }
+    .a-hero-main {}
+    .a-hero-line {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4.5vw, 52px);
+      font-weight: 400; line-height: 1.18;
+      letter-spacing: -0.01em; color: var(--ink-a);
+      margin-bottom: 24px; max-width: 520px;
+    }
+    .a-hero-line em { font-style: italic; color: var(--mid-a); }
+    .a-hero-sub {
+      font-size: 14px; font-weight: 300; color: var(--mid-a);
+      line-height: 1.85; max-width: 380px; margin-bottom: 32px;
+    }
+    .a-btn {
+      display: inline-flex; align-items: center;
+      background: var(--accent-a); color: #fff;
+      font-family: var(--sans); font-size: 10px;
+      font-weight: 400; letter-spacing: 0.14em;
+      text-transform: uppercase; text-decoration: none;
+      padding: 12px 22px; margin-right: 16px;
+      transition: opacity 0.2s;
+    }
+    .a-btn:hover { opacity: 0.82; }
+    .a-btn-ghost {
+      font-size: 10px; font-weight: 300;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--mid-a); text-decoration: none;
+      border-bottom: 1px solid var(--rule-a); padding-bottom: 2px;
+      transition: color 0.18s;
+    }
+
+    /* A — SECTION */
+    .a-section {
+      padding: 56px 64px;
+      border-top: 1px solid var(--rule-a);
+    }
+    .a-sec-row {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 0 48px;
+    }
+    .a-sec-label {
+      font-size: 10px; font-weight: 300;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--faint-a); text-align: right;
+      padding-right: 32px; padding-top: 4px;
+    }
+    .a-sec-title {
+      font-family: var(--serif);
+      font-size: 30px; font-weight: 400;
+      line-height: 1.2; letter-spacing: -0.01em;
+      margin-bottom: 32px;
+    }
+
+    /* A — ESSAY LIST */
+    .a-essay { display: grid; grid-template-columns: 240px 1fr auto; gap: 0 40px; padding: 24px 64px; border-bottom: 1px solid var(--rule-a); text-decoration: none; color: inherit; }
+    .a-essay:first-child { border-top: 1px solid var(--rule-a); }
+    .a-essay:hover .a-essay-title { color: var(--accent-a); }
+    .a-essay-date { font-size: 11px; font-weight: 300; letter-spacing: 0.05em; color: var(--faint-a); text-align: right; padding-right: 32px; padding-top: 3px; }
+    .a-essay-title { font-family: var(--serif); font-size: 19px; font-weight: 400; line-height: 1.3; color: var(--ink-a); margin-bottom: 5px; transition: color 0.18s; }
+    .a-essay-desc { font-size: 12px; font-weight: 300; color: var(--mid-a); line-height: 1.65; }
+    .a-essay-cat { font-size: 10px; font-weight: 300; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-a); padding-top: 4px; white-space: nowrap; }
+
+    /* A — NOW LIST */
+    .a-now-item { display: grid; grid-template-columns: 240px 1fr; gap: 0 40px; padding: 18px 64px; border-bottom: 1px solid var(--rule-a); }
+    .a-now-item:first-child { border-top: 1px solid var(--rule-a); }
+    .a-now-key { font-size: 10px; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-a); text-align: right; padding-right: 32px; padding-top: 2px; }
+    .a-now-val { font-size: 14px; font-weight: 300; color: var(--mid-a); line-height: 1.75; }
+    .a-now-val strong { font-weight: 400; color: var(--ink-a); }
+
+    .a-footer { border-top: 1px solid var(--rule-a); padding: 24px 64px; display: grid; grid-template-columns: 240px 1fr auto; align-items: center; gap: 0 40px; }
+    .a-footer-locale { font-size: 11px; font-weight: 300; letter-spacing: 0.08em; color: var(--faint-a); text-align: right; padding-right: 32px; }
+    .a-footer-copy { font-family: var(--serif); font-size: 13px; color: var(--faint-a); }
+    .a-footer-links { display: flex; gap: 20px; }
+    .a-footer-links a { font-size: 10px; font-weight: 300; letter-spacing: 0.13em; text-transform: uppercase; color: var(--faint-a); text-decoration: none; transition: color 0.18s; }
+    .a-footer-links a:hover { color: var(--ink-a); }
+
+    /* ═══════════════════════════════════════
+       LAYOUT B — SIDEBAR DASHBOARD
+    ═══════════════════════════════════════ */
+    #layout-b {
+      background: var(--bg-b);
+      color: var(--ink-b);
+      display: none;
+    }
+    #layout-b.on { display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .b-sidebar {
+      width: 196px;
+      flex-shrink: 0;
+      background: var(--sidebar-b);
+      border-right: 1px solid var(--rule-b);
+      position: fixed;
+      top: 48px;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 0 24px;
+      overflow-y: auto;
+    }
+
+    .b-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-b);
+      text-decoration: none;
+      padding: 0 20px 24px;
+      border-bottom: 1px solid var(--rule-b);
+      display: block;
+    }
+
+    .b-nav { padding: 16px 0; flex: 1; }
+    .b-nav-group { margin-bottom: 20px; }
+    .b-nav-group-label {
+      font-size: 9px; font-weight: 400;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--faint-b); padding: 0 20px 8px;
+      display: block;
+    }
+    .b-nav-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 20px;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    .b-nav-item:hover { background: var(--rule-b); }
+    .b-nav-item.active { background: var(--rule-b); }
+    .b-nav-left { display: flex; align-items: center; gap: 10px; }
+    .b-nav-icon { font-size: 13px; }
+    .b-nav-text { font-size: 12px; font-weight: 300; color: var(--ink-b); letter-spacing: 0.01em; }
+    .b-nav-num { font-family: var(--mono); font-size: 10px; color: var(--faint-b); }
+
+    .b-sidebar-footer {
+      padding: 16px 20px 0;
+      border-top: 1px solid var(--rule-b);
+    }
+    .b-sidebar-footer a {
+      display: block;
+      font-size: 11px; font-weight: 300;
+      color: var(--mid-b); text-decoration: none;
+      padding: 4px 0; transition: color 0.15s;
+    }
+    .b-sidebar-footer a:hover { color: var(--ink-b); }
+
+    /* MAIN */
+    .b-main {
+      margin-left: 196px;
+      flex: 1;
+      padding: 48px 56px 80px;
+      max-width: 860px;
+    }
+
+    /* GREETING */
+    .b-greeting {
+      font-family: var(--serif);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      color: var(--ink-b);
+    }
+
+    .b-greeting-sub {
+      font-size: 14px; font-weight: 300;
+      color: var(--mid-b); line-height: 1.8;
+      max-width: 480px; margin-bottom: 40px;
+    }
+
+    .b-cta-row { display: flex; gap: 12px; align-items: center; margin-bottom: 56px; }
+    .b-btn {
+      display: inline-flex; align-items: center;
+      background: var(--ink-b); color: #fff;
+      font-family: var(--sans); font-size: 11px;
+      font-weight: 300; letter-spacing: 0.1em;
+      text-transform: uppercase; text-decoration: none;
+      padding: 10px 20px; transition: opacity 0.18s;
+    }
+    .b-btn:hover { opacity: 0.75; }
+    .b-btn-outline {
+      display: inline-flex; align-items: center;
+      border: 1px solid var(--rule-b);
+      background: transparent; color: var(--mid-b);
+      font-family: var(--sans); font-size: 11px;
+      font-weight: 300; letter-spacing: 0.1em;
+      text-transform: uppercase; text-decoration: none;
+      padding: 10px 20px; transition: all 0.18s;
+    }
+    .b-btn-outline:hover { border-color: var(--ink-b); color: var(--ink-b); }
+
+    /* B — CONTENT BLOCKS */
+    .b-section { margin-bottom: 52px; }
+
+    .b-section-head {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--rule-b);
+    }
+    .b-section-title {
+      font-size: 11px; font-weight: 400;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--mid-b);
+    }
+    .b-section-link {
+      font-size: 11px; font-weight: 300;
+      color: var(--faint-b); text-decoration: none;
+      letter-spacing: 0.06em; transition: color 0.15s;
+    }
+    .b-section-link:hover { color: var(--ink-b); }
+
+    /* B — ESSAY ITEMS */
+    .b-essay {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 0 24px; padding: 14px 0;
+      border-bottom: 1px solid var(--rule-b);
+      text-decoration: none; color: inherit;
+    }
+    .b-essay:last-child { border-bottom: none; }
+    .b-essay:hover .b-essay-title { color: #000; }
+    .b-essay-title {
+      font-family: var(--serif); font-size: 18px;
+      font-weight: 400; color: var(--ink-b);
+      margin-bottom: 3px; line-height: 1.3;
+      transition: color 0.15s;
+    }
+    .b-essay-desc {
+      font-size: 12px; font-weight: 300;
+      color: var(--mid-b); line-height: 1.6;
+    }
+    .b-essay-meta { text-align: right; padding-top: 2px; }
+    .b-essay-date { font-family: var(--mono); font-size: 10px; color: var(--faint-b); display: block; margin-bottom: 4px; }
+    .b-essay-tag { font-size: 9px; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid-b); }
+
+    /* B — TWO-COL GRID */
+    .b-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule-b); border: 1px solid var(--rule-b); margin-bottom: 52px; }
+    .b-grid-section-head { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg-b); border-bottom: 1px solid var(--rule-b); }
+
+    /* B — NOW ITEMS */
+    .b-now { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--rule-b); align-items: baseline; }
+    .b-now:last-child { border-bottom: none; }
+    .b-now-key { font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--faint-b); letter-spacing: 0.08em; white-space: nowrap; min-width: 72px; }
+    .b-now-val { font-size: 13px; font-weight: 300; color: var(--mid-b); line-height: 1.65; }
+    .b-now-val strong { font-weight: 400; color: var(--ink-b); }
+
+    /* B — PLAYLIST CARD */
+    .b-playlist-card {
+      background: var(--bg-b); padding: 16px;
+    }
+    .b-playlist-name { font-family: var(--serif); font-size: 15px; font-weight: 400; color: var(--ink-b); margin-bottom: 4px; }
+    .b-playlist-desc { font-size: 11px; font-weight: 300; color: var(--mid-b); margin-bottom: 12px; }
+    .b-spotify-mock {
+      background: #121212; border-radius: 6px;
+      height: 72px; display: flex; align-items: center;
+      gap: 12px; padding: 0 14px;
+    }
+    .b-spotify-dot { width: 28px; height: 28px; background: #1DB954; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .b-spotify-dot svg { width: 14px; height: 14px; fill: #000; }
+    .b-spotify-info { flex: 1; }
+    .b-spotify-track { font-size: 11px; font-weight: 400; color: #fff; margin-bottom: 2px; }
+    .b-spotify-sub { font-size: 10px; color: rgba(255,255,255,0.4); }
+    .b-spotify-bars { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+    .b-spotify-bars span { display: block; width: 2px; background: #1DB954; border-radius: 1px; animation: bar 1.2s ease-in-out infinite; }
+    .b-spotify-bars span:nth-child(1) { height: 60%; animation-delay: 0s; }
+    .b-spotify-bars span:nth-child(2) { height: 100%; animation-delay: 0.15s; }
+    .b-spotify-bars span:nth-child(3) { height: 45%; animation-delay: 0.3s; }
+    .b-spotify-bars span:nth-child(4) { height: 80%; animation-delay: 0.45s; }
+    @keyframes bar { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+
+    /* B — SUBSCRIBE */
+    .b-subscribe {
+      background: var(--sidebar-b);
+      border: 1px solid var(--rule-b);
+      padding: 28px 32px;
+      margin-bottom: 0;
+    }
+    .b-sub-title { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--ink-b); margin-bottom: 8px; }
+    .b-sub-desc { font-size: 13px; font-weight: 300; color: var(--mid-b); line-height: 1.7; margin-bottom: 20px; }
+    .b-form { display: flex; border: 1px solid var(--rule-b); background: var(--bg-b); }
+    .b-form input { flex: 1; padding: 12px 16px; font-family: var(--sans); font-size: 13px; font-weight: 300; color: var(--ink-b); background: transparent; border: none; outline: none; }
+    .b-form input::placeholder { color: var(--faint-b); }
+    .b-form button { padding: 12px 18px; background: var(--ink-b); color: #fff; font-family: var(--sans); font-size: 10px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; transition: opacity 0.18s; }
+    .b-form button:hover { opacity: 0.75; }
+    .b-form-note { font-size: 11px; color: var(--faint-b); margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<!-- COMPARE TOOLBAR -->
+<div class="compare-bar">
+  <button class="on" onclick="pick('a')">A — Margin Line</button>
+  <span>vs</span>
+  <button onclick="pick('b')">B — Sidebar Dashboard</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     LAYOUT A: MARGIN LINE / NOTEBOOK
+══════════════════════════════════════════ -->
+<div id="layout-a" class="layout on">
+
+  <nav class="a-nav">
+    <a href="#" class="a-nav-name">Michel Moubarak</a>
+    <ul class="a-nav-links">
+      <li><a href="#">Writing</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Now</a></li>
+    </ul>
+  </nav>
+
+  <div class="a-body">
+
+    <!-- HERO -->
+    <div class="a-hero">
+      <div class="a-hero-aside">M.M.</div>
+      <div class="a-hero-main">
+        <h1 class="a-hero-line">
+          I came back to making things.<br>
+          <em>This is where I think out loud.</em>
+        </h1>
+        <p class="a-hero-sub">Notes on art, on building, on the long view. Occasional. Worth it, I hope.</p>
+        <a href="#" class="a-btn">Subscribe</a>
+        <a href="#" class="a-btn-ghost">Reach out</a>
+      </div>
+    </div>
+
+    <!-- ESSAYS -->
+    <div class="a-section">
+      <div class="a-sec-row">
+        <div class="a-sec-label">Writing</div>
+        <h2 class="a-sec-title">Essays</h2>
+      </div>
+    </div>
+    <a href="#" class="a-essay">
+      <span class="a-essay-date">Feb 2026</span>
+      <div><div class="a-essay-title">On mimesis and why most ambition is borrowed</div><p class="a-essay-desc">We rarely want what we want. We want what someone else wants, then we make it our own story.</p></div>
+      <span class="a-essay-cat">Identity</span>
+    </a>
+    <a href="#" class="a-essay">
+      <span class="a-essay-date">Jan 2026</span>
+      <div><div class="a-essay-title">The case for compound taste</div><p class="a-essay-desc">Taste is not innate. It is the residue of sustained attention over time — and it compounds.</p></div>
+      <span class="a-essay-cat">Taste</span>
+    </a>
+    <a href="#" class="a-essay">
+      <span class="a-essay-date">Dec 2025</span>
+      <div><div class="a-essay-title">Why I stopped optimizing for speed</div><p class="a-essay-desc">There is a version of productivity that is just anxiety with a better name.</p></div>
+      <span class="a-essay-cat">Discipline</span>
+    </a>
+    <a href="#" class="a-essay">
+      <span class="a-essay-date">Nov 2025</span>
+      <div><div class="a-essay-title">Art as a way of staying honest</div><p class="a-essay-desc">The creative practice doesn't ask what is useful. It asks what is true.</p></div>
+      <span class="a-essay-cat">Creative</span>
+    </a>
+
+    <!-- NOW -->
+    <div class="a-section">
+      <div class="a-sec-row">
+        <div class="a-sec-label">Now</div>
+        <p style="font-family:var(--mono);font-size:11px;color:var(--faint-a);padding-top:4px;letter-spacing:0.06em;">March 2026 · Montréal</p>
+      </div>
+    </div>
+    <div class="a-now-item"><span class="a-now-key">Building</span><span class="a-now-val">A new project at the intersection of <strong>community and creative practice.</strong></span></div>
+    <div class="a-now-item"><span class="a-now-key">Reading</span><span class="a-now-val"><strong>René Girard, Simone Weil,</strong> and anything on the history of craft.</span></div>
+    <div class="a-now-item"><span class="a-now-key">Listening</span><span class="a-now-val">Late Night Focus · <strong>32 tracks, 2hr 14min</strong></span></div>
+    <div class="a-now-item"><span class="a-now-key">Writing</span><span class="a-now-val">A longer essay on the relationship between <strong>discipline and freedom.</strong></span></div>
+
+    <!-- FOOTER -->
+    <div class="a-footer" style="margin-top:56px;">
+      <span class="a-footer-locale">Montréal, CA</span>
+      <span class="a-footer-copy">Michel Moubarak · © 2026</span>
+      <div class="a-footer-links">
+        <a href="#">Twitter</a><a href="#">Instagram</a><a href="#">LinkedIn</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     LAYOUT B: SIDEBAR DASHBOARD
+══════════════════════════════════════════ -->
+<div id="layout-b" class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="b-sidebar">
+    <a href="#" class="b-logo">// MM</a>
+    <nav class="b-nav">
+      <div class="b-nav-group">
+        <a href="#" class="b-nav-item active">
+          <div class="b-nav-left">
+            <span class="b-nav-icon">⌂</span>
+            <span class="b-nav-text">Home</span>
+          </div>
+          <span class="b-nav-num">1</span>
+        </a>
+        <a href="#" class="b-nav-item">
+          <div class="b-nav-left">
+            <span class="b-nav-icon">✎</span>
+            <span class="b-nav-text">Writing</span>
+          </div>
+          <span class="b-nav-num">2</span>
+        </a>
+        <a href="#" class="b-nav-item">
+          <div class="b-nav-left">
+            <span class="b-nav-icon">◯</span>
+            <span class="b-nav-text">About</span>
+          </div>
+          <span class="b-nav-num">3</span>
+        </a>
+        <a href="#" class="b-nav-item">
+          <div class="b-nav-left">
+            <span class="b-nav-icon">→</span>
+            <span class="b-nav-text">Now</span>
+          </div>
+          <span class="b-nav-num">4</span>
+        </a>
+      </div>
+      <div class="b-nav-group">
+        <span class="b-nav-group-label">Explore</span>
+        <a href="#" class="b-nav-item">
+          <div class="b-nav-left">
+            <span class="b-nav-icon">♫</span>
+            <span class="b-nav-text">Playlists</span>
+          </div>
+          <span class="b-nav-num">5</span>
+        </a>
+        <a href="#" class="b-nav-item">
+          <div class="b-nav-left">
+            <span class="b-nav-icon">◈</span>
+            <span class="b-nav-text">Projects</span>
+          </div>
+          <span class="b-nav-num">6</span>
+        </a>
+      </div>
+      <div class="b-nav-group">
+        <span class="b-nav-group-label">Stay in touch</span>
+        <a href="#" class="b-nav-item">
+          <div class="b-nav-left">
+            <span class="b-nav-icon">✉</span>
+            <span class="b-nav-text">Newsletter</span>
+          </div>
+        </a>
+        <a href="#" class="b-nav-item">
+          <div class="b-nav-left">
+            <span class="b-nav-icon">↗</span>
+            <span class="b-nav-text">Contact</span>
+          </div>
+        </a>
+      </div>
+    </nav>
+    <div class="b-sidebar-footer">
+      <a href="#">Twitter</a>
+      <a href="#">Instagram</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="b-main">
+
+    <!-- GREETING -->
+    <h1 class="b-greeting" id="b-greeting">Good evening, I'm Michel.</h1>
+    <p class="b-greeting-sub">I think about how people build things that last — companies, creative practices, communities. I write to understand, and I share what I find worth keeping.</p>
+    <div class="b-cta-row">
+      <a href="#" class="b-btn">Subscribe to notes</a>
+      <a href="#" class="b-btn-outline">Reach out</a>
+    </div>
+
+    <!-- WRITING -->
+    <div class="b-section">
+      <div class="b-section-head">
+        <span class="b-section-title">Latest Writing</span>
+        <a href="#" class="b-section-link">View all →</a>
+      </div>
+      <a href="#" class="b-essay">
+        <div><div class="b-essay-title">On mimesis and why most ambition is borrowed</div><p class="b-essay-desc">We rarely want what we want. We want what someone else wants, then we make it our own story.</p></div>
+        <div class="b-essay-meta"><span class="b-essay-date">Feb 2026</span><span class="b-essay-tag">Identity</span></div>
+      </a>
+      <a href="#" class="b-essay">
+        <div><div class="b-essay-title">The case for compound taste</div><p class="b-essay-desc">Taste is not innate. It is the residue of sustained attention over time — and it compounds.</p></div>
+        <div class="b-essay-meta"><span class="b-essay-date">Jan 2026</span><span class="b-essay-tag">Taste</span></div>
+      </a>
+      <a href="#" class="b-essay">
+        <div><div class="b-essay-title">Why I stopped optimizing for speed</div><p class="b-essay-desc">There is a version of productivity that is just anxiety with a better name. I had to unlearn it.</p></div>
+        <div class="b-essay-meta"><span class="b-essay-date">Dec 2025</span><span class="b-essay-tag">Discipline</span></div>
+      </a>
+    </div>
+
+    <!-- NOW + PLAYLISTS SIDE BY SIDE -->
+    <div class="b-grid-2">
+      <div class="b-grid-section-head">
+        <span class="b-section-title">Now</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--faint-b);">March 2026 · Montréal</span>
+      </div>
+      <div style="background:var(--bg-b);padding:16px 16px 20px;border-right:1px solid var(--rule-b);">
+        <div class="b-now"><span class="b-now-key">building</span><span class="b-now-val">A project at the intersection of <strong>community + creative practice</strong></span></div>
+        <div class="b-now"><span class="b-now-key">reading</span><span class="b-now-val"><strong>René Girard</strong>, Simone Weil, history of craft</span></div>
+        <div class="b-now"><span class="b-now-key">writing</span><span class="b-now-val">Essay on <strong>discipline and freedom</strong></span></div>
+        <div class="b-now"><span class="b-now-key">thinking</span><span class="b-now-val">What compounding means at the level of <strong>identity</strong></span></div>
+      </div>
+      <div style="background:var(--bg-b);padding:0;">
+        <div class="b-grid-section-head" style="border-top:none;">
+          <span class="b-section-title">Listening</span>
+          <a href="#" class="b-section-link">All playlists →</a>
+        </div>
+        <div style="padding:16px;">
+          <div class="b-playlist-card" style="padding:0;margin-bottom:14px;">
+            <div class="b-spotify-mock">
+              <div class="b-spotify-dot"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div>
+              <div class="b-spotify-info"><div class="b-spotify-track">Late Night Focus</div><div class="b-spotify-sub">32 tracks · 2hr 14min</div></div>
+              <div class="b-spotify-bars"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <p style="font-size:11px;font-weight:300;color:var(--mid-b);margin-top:8px;">Deep work sessions. No lyrics, just flow.</p>
+          </div>
+          <div class="b-playlist-card" style="padding:0;">
+            <div class="b-spotify-mock">
+              <div class="b-spotify-dot"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div>
+              <div class="b-spotify-info"><div class="b-spotify-track">Sunday Morning</div><div class="b-spotify-sub">24 tracks · 1hr 38min</div></div>
+              <div class="b-spotify-bars"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <p style="font-size:11px;font-weight:300;color:var(--mid-b);margin-top:8px;">Slow coffee, good light, nowhere to be.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBSCRIBE -->
+    <div class="b-subscribe">
+      <h3 class="b-sub-title">Thinking worth returning to.</h3>
+      <p class="b-sub-desc">Occasional notes on what I'm reading, building, and noticing. No frequency promises. Only substance.</p>
+      <div class="b-form">
+        <input type="email" placeholder="your@email.com" />
+        <button>Subscribe</button>
+      </div>
+      <p class="b-form-note">Infrequent. Unsubscribe anytime.</p>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+  // Time-based greeting
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const el = document.getElementById('b-greeting');
+  if (el) el.textContent = greet + ", I'm Michel.";
+
+  // Layout toggle
+  function pick(id) {
+    document.querySelectorAll('.layout').forEach(l => l.classList.remove('on'));
+    document.getElementById('layout-' + id).classList.add('on');
+    document.querySelectorAll('.compare-bar button').forEach((b, i) => {
+      b.classList.toggle('on', ['a','b'][i] === id);
+    });
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
